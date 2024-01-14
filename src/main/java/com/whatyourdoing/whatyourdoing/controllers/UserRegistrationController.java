@@ -22,7 +22,7 @@ public class UserRegistrationController {
             produces= MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HashMap<String,String> validateUser(@RequestParam String userID, String password) {
-        System.out.println(" in validateUser, validating " + userID + " with password " + password);
+        System.out.println(" in validaetUser, validating " + userID + " with password " + password);
         HashMap<String,String> returnSet = new HashMap<>();
         returnSet.put("STATUS","Failure");
         if (userID == null || userID.isEmpty()) {
@@ -65,6 +65,30 @@ public class UserRegistrationController {
 
 
         returnSet.put("STATUS","Success");
+        return returnSet;
+    }
+
+
+    @CrossOrigin
+    @RequestMapping(method= {RequestMethod.GET}, value= "GetUserCount",
+            produces= MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public HashMap<String,String> GetUserCount() {
+        System.out.println(" in GetUserCount ");
+        HashMap<String,String> returnSet = new HashMap<>();
+        returnSet.put("STATUS","Failure");
+        int nofUsers = 0;
+        Iterable<UserInfo> userInfos = userInfoRepository.findAll();
+        Iterator<UserInfo> userInfoIterator = userInfos.iterator();
+
+        UserInfo userInfo = null;
+        while (userInfoIterator.hasNext()) {
+            userInfoIterator.next();
+            nofUsers++;
+        }
+        System.out.println(" Found users " + nofUsers);
+        returnSet.put("STATUS","Success");
+        returnSet.put("COUNT", String.valueOf(nofUsers));
         return returnSet;
     }
 
